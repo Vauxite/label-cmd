@@ -1,6 +1,7 @@
 {
-	"general":{
-		"Logfile":"/var/log/label_cmd.log"
+	"logging":{
+		"logfile":"label_cmd.log",
+		"loglevel":"DEBUG"
 	},
 	"core":{
 		"translate":{

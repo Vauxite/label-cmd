@@ -1,5 +1,5 @@
 from deluge_client import DelugeRPCClient
-import sys,json,subprocess,os
+import sys,json,subprocess,logging
 #Argv
 ##1 Script_file
 ##2 Torrent_Id
@@ -15,13 +15,31 @@ secret_path = "config/secrets.json"
 config = readConfig(config_path)
 secrets = readConfig(secret_path)
 
-Torrent_Id      = sys.argv[1]
+Torrent_Id      = 'b74fe0edc44974f8635dd6db173931755cf0693d' #sys.argv[1]
 
+def do_log(level,msg):
+    logger = logging.getLogger('label-cmd')
+    logger.setLevel(config['logging']['loglevel'])
+                    
+    handler = logging.FileHandler(config['logging']['logfile'])
+    handler.setLevel(config['logging']['loglevel'])
+    logformat = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(logformat)
 
-def btw_str(mString, a, b):
-    start =  mString.find(a)
-    end = mString.find(b, start+1)
-    return mString[start+len(a):end]
+    logger.addHandler(handler)
+
+    level = int(level)
+    if level == 0:
+        logger.info(msg)
+    elif level == 1:
+        logger.warn(msg)
+    elif level == 2:
+        logger.error(msg)
+    elif level == 3:
+        logger.debug(msg)
+    else:
+        print level
+
 def do_translate(arg,torrent):
     for key,values in config['core']['translate'].items():
         searchword = key
@@ -43,7 +61,11 @@ def do_action(config,torrent):
     action = config['actions'][config['labels'][torrent['label']]['action']]
     executable = action['executable']
     arguments = do_translate(action['arguments'],torrent)
-    result = subprocess.call(executable)
+    #result = subprocess.call(executable)
+
+    
+    result = executable + " - " + arguments
+    do_log('3',result)
     return result
 def get_action(config,torrent):
     action = config['labels'][torrent['label']]['action']
@@ -58,7 +80,7 @@ else:
     torrent = client.call('core.get_torrent_status', Torrent_Id, T_filter)
     if torrent['label'] in config['labels']:
         try:
-            print do_action(config,torrent)
+            do_action(config,torrent)
         except WindowsError:
             print "Windows is not supported"
         except subprocess.CalledProcessError:
