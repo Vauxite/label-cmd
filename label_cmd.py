@@ -87,7 +87,6 @@ else:
                 T_filter.append(item) 
         else:
             T_filter.append(value)
-    print T_filter
     torrent = client.call('core.get_torrent_status', Torrent_Id, T_filter)
     if torrent['label'] in config['labels']:
         try:
