@@ -74,7 +74,14 @@ if  len(sys.argv) != 1:
 else:
     client =  DelugeRPCClient(config['deluge']['host'], config['deluge']['port'], secrets['deluge']['user'], secrets['deluge']['passwd'])
     client.connect()
-    T_filter = ["label","name","path","move_completed_path"]
+    T_filter = ['name','label']
+    for value in config['core']['translate'].values():
+        if isinstance(value,list):
+            for item in value:
+                T_filter.append(item) 
+        else:
+            T_filter.append(value)
+    print T_filter
     torrent = client.call('core.get_torrent_status', Torrent_Id, T_filter)
     if torrent['label'] in config['labels']:
         try:
