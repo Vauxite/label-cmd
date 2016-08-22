@@ -75,7 +75,7 @@ def get_action(config,torrent):
     action = config['labels'][torrent['label']]['action']
     return config['actions'][action]
 if  len(sys.argv) != 1:
-    do_log(2,"Unsupported amount of arguments("+len(sys.argv)+"). Correct usage: script.py torrent_id")
+    do_log(2,"Unsupported amount of arguments("+str(len(sys.argv))+"). Correct usage: script.py torrent_id")
     sys.exit()
 else:
     client =  DelugeRPCClient(config['deluge']['host'], config['deluge']['port'], secrets['deluge']['user'], secrets['deluge']['passwd'])
