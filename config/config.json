@@ -1,6 +1,6 @@
 {
-	"General":{
-		"Logfile":"D:\\Projects\\Label-Extractor"
+	"general":{
+		"Logfile":"/var/log/label_cmd.log"
 	},
 	"core":{
 		"translate":{
