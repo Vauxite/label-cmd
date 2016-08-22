@@ -1,0 +1,48 @@
+{
+	"General":{
+		"Logfile":"D:\\Projects\\Label-Extractor"
+	},
+	"core":{
+		"translate":{
+			"%%torrentpath%%": ["move_completed_path","/","name"],
+			"%%torrentname%%":"name",
+			"%%label%%":"label"
+		}
+	},
+    "deluge":{
+        "host":"127.0.0.1",
+        "port":58846
+    },
+	"actions":{
+		"extract":{
+			"executable":"unrar",
+			"arguments":"-o- x %%torrentpath%%/*.rar"
+		},
+		"ping":{
+			"executable":"ping",
+			"arguments":"-t 127.0.0.1"
+		},
+		"copy":{
+			"executable":"cp",
+			"arguments":"-r %%torrentpath%% /new/path/folder"
+		},	
+		"none":{
+			"executable":"",
+			"arguments":""
+		}	
+	},
+    "labels":{
+		"tv":{
+			"action":"extract"
+		},
+		"movies":{
+			"action":"extract"
+		},
+		"games":{
+			"action":"copy"
+		},
+		"Default":{
+			"action":"none"
+		}
+    }
+}
