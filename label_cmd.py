@@ -4,6 +4,11 @@ import sys,json,subprocess,logging
 ##1 Script_file
 ##2 Torrent_Id
 
+#for testing
+#sys.argv = [sys.argv[0],'torrent HASH']
+
+
+
 def readConfig(path):
     with open(path+'') as json_data_file:
         data = json.load(json_data_file)
@@ -70,7 +75,7 @@ def get_action(config,torrent):
     action = config['labels'][torrent['label']]['action']
     return config['actions'][action]
 if  len(sys.argv) != 1:
-    do_log(2,"Unsupported amount of arguments.\nCorrect usage: script.py torrent_id")
+    do_log(2,"Unsupported amount of arguments("+len(sys.argv)+"). Correct usage: script.py torrent_id")
 else:
     client =  DelugeRPCClient(config['deluge']['host'], config['deluge']['port'], secrets['deluge']['user'], secrets['deluge']['passwd'])
     client.connect()
