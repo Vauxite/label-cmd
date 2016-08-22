@@ -15,7 +15,7 @@ secret_path = "config/secrets.json"
 config = readConfig(config_path)
 secrets = readConfig(secret_path)
 
-Torrent_Id      = "b74fe0edc44974f8635dd6db173931755cf0693d" #= sys.argv[1]
+Torrent_Id      = sys.argv[1]
 
 
 def btw_str(mString, a, b):
@@ -37,20 +37,13 @@ def do_translate(arg,torrent):
                 replacewith = torrent[values]
         else:
             print "Error unsupported keyValue for torrent: " +key
-        print searchword + " : " + replacewith
-    
-    arg = arg.replace("%%torrentpath%%", torrent['move_completed_path']+'/'+torrent['name'])
-    arg = arg.replace("%%torrentname%%", torrent['name'])
+        arg = arg.replace(searchword,replacewith)
     return arg
 def do_action(config,torrent):
     action = config['actions'][config['labels'][torrent['label']]['action']]
     executable = action['executable']
     arguments = do_translate(action['arguments'],torrent)
-    print  executable+" "+arguments
-    
-         #result = subprocess.call(executable)
-    #result = os.system(executable+" "+arguments
-    result ="Success " 
+    result = subprocess.call(executable)
     return result
 def get_action(config,torrent):
     action = config['labels'][torrent['label']]['action']
