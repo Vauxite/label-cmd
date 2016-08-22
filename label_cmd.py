@@ -74,7 +74,7 @@ def do_action(config,torrent):
 def get_action(config,torrent):
     action = config['labels'][torrent['label']]['action']
     return config['actions'][action]
-if  len(sys.argv) != 1:
+if  len(sys.argv) != 2:
     do_log(2,"Unsupported amount of arguments("+str(len(sys.argv))+"). Correct usage: script.py torrent_id")
     sys.exit()
 else:
