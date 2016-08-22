@@ -100,6 +100,6 @@ else:
             do_log(2,"Unexpected error:" + sys.exc_info()[0])
             raise
     else:
-        print "Unkown label. No Action taken"
+        do_log(1,"Unkown label. No Action taken")
 
 
