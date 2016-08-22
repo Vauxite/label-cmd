@@ -5,12 +5,15 @@ import sys,json,subprocess,os
 ##2 Torrent_Id
 
 def readConfig(path):
-    with open(path+'\config.json') as json_data_file:
+    with open(path+'') as json_data_file:
         data = json.load(json_data_file)
     return data
 
-config_path =  "config"
+config_path = "config/config.json"
+secret_path = "config/secrets.json"
+
 config = readConfig(config_path)
+secrets = readConfig(secret_path)
 
 Torrent_Id      = "b74fe0edc44974f8635dd6db173931755cf0693d" #= sys.argv[1]
 
@@ -56,7 +59,7 @@ if  len(sys.argv) != 1:
     print "Unsupported amount of arguments"
     print "Correct usage: script.py torrent_id"
 else:
-    client =  DelugeRPCClient(config['deluge']['host'], config['deluge']['port'], config['deluge']['user'], config['deluge']['passwd'])
+    client =  DelugeRPCClient(config['deluge']['host'], config['deluge']['port'], secrets['deluge']['user'], secrets['deluge']['passwd'])
     client.connect()
     T_filter = ["label","name","path","move_completed_path"]
     torrent = client.call('core.get_torrent_status', Torrent_Id, T_filter)
