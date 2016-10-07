@@ -9,18 +9,27 @@ import sys,json,subprocess,logging
 
 
 
+def load_actions(path):
+
+    return True
+def load_labels(path):
+
+    return True
+
 def readConfig(path):
     with open(path+'') as json_data_file:
         data = json.load(json_data_file)
+
+
     return data
 
-config_path = "config/config.json"
-secret_path = "config/secrets.json"
+config_path     = "config/config.json"
+secret_path     = "config/secrets.json"
+config          = readConfig(config_path)
+secrets         = readConfig(secret_path)
+Torrent_Id      ="6203b965543ba15458ed96f11153e5dda11c6e45" #sys.argv[1]
 
-config = readConfig(config_path)
-secrets = readConfig(secret_path)
 
-Torrent_Id      = sys.argv[1]
 
 def do_log(level,msg):
     logger = logging.getLogger('label-cmd')
@@ -46,7 +55,7 @@ def do_log(level,msg):
         raise
 
 def do_translate(arg,torrent):
-    for key,values in config['core']['translate'].items():
+    for key,values in config['translate'].items():
         searchword = key
         replacewith = ''
         if isinstance(values,list):
@@ -74,14 +83,16 @@ def do_action(config,torrent):
 def get_action(config,torrent):
     action = config['labels'][torrent['label']]['action']
     return config['actions'][action]
-if  len(sys.argv) =< 2:
+
+#Running the software
+if  len(sys.argv) > 2:
     do_log(2,"Unsupported amount of arguments("+str(len(sys.argv))+"). Correct usage: script.py torrent_id")
     sys.exit()
 else:
     client =  DelugeRPCClient(config['deluge']['host'], config['deluge']['port'], secrets['deluge']['user'], secrets['deluge']['passwd'])
     client.connect()
     T_filter = ['name','label']
-    for value in config['core']['translate'].values():
+    for value in config['translate'].values():
         if isinstance(value,list):
             for item in value:
                 T_filter.append(item) 
@@ -96,9 +107,12 @@ else:
         except subprocess.CalledProcessError:
             do_log(1,"Attempted action is not supported")
         except:
-            do_log(2,"Unexpected error:" + sys.exc_info()[0])
+            do_log(2,"Unexpected error")
             raise
     else:
         do_log(1,"Unkown label ("+torrent['label']+"). No Action taken")
 
+
+
+                    
 

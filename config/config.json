@@ -3,12 +3,28 @@
 		"logfile":"label_cmd.log",
 		"loglevel":"DEBUG"
 	},
-	"core":{
-		"translate":{
-			"%%torrentpath%%": ["move_completed_path","/","name"],
-			"%%torrentname%%":"name",
-			"%%label%%":"label"
-		}
+	"translate":{
+		"%%torrentpath%%": ["move_completed_path","/","name"],
+		"%%torrentname%%":"name",
+		"%%label%%":"label"
+	},
+	"config":{
+		"actions":{
+			"folder":[],
+			"file":[]
+		},
+		"labels":{
+			"folder":[],
+			"file":[]
+		},
+		"actions":{
+			"folder":[],
+			"file":[]
+		},
+		"conditions":{
+			"mainfile":[],
+			"subtitles":[]
+		}		
 	},
     "deluge":{
         "host":"127.0.0.1",
