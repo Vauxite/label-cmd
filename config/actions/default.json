@@ -1,13 +1,13 @@
 {
 	"extract":{
-		"executable":"unrar",
-		"arguments":"-o- x %%torrentpath%%/*.rar"
+		"executable":"/usr/bin/unrar",
+		"arguments":"-o- x \"%%torrentpath%%/*.rar\""
 	},
 	"ping":{
 		"executable":"ping",
 		"arguments":"-t 127.0.0.1"
 	},
-	"copy":{
+	"move":{
 		"executable":"cp",
 		"arguments":"-r %%torrentpath%% /new/path/folder"
 	},	

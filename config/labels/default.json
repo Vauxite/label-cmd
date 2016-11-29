@@ -6,6 +6,12 @@
 				"move"
 			]
 	},
+	"flexget-tv":{
+		"action":
+			[
+				"extract"
+			]
+	},
 	"movies":{
 		"action":"extract"
 	},

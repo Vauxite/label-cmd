@@ -1,23 +1,24 @@
 from deluge_client import DelugeRPCClient
-import sys,json,subprocess,logging
+import sys,json,subprocess,logging,shlex,re
 
 class label_cmd:
-    actions =[]
+    actions ={}
     labels ={}
     def read_config(self,path):
         with open(path+'') as json_data_file:
             data = json.load(json_data_file)
         return data
     def add_action(self,action,run):
-        self.actions.append((action,run))
+		self.actions[action] = run
+        #self.actions.append((action,run))
     def add_label(self,label,action):
         self.labels[label] = action
-    def __init__(self,torrent, config_path,secret_path):
-        self.torrent       = torrent
-        self.config        = self.read_config(config_path)
-        self.secrets       = self.read_config(secret_path)
-        self.client =  DelugeRPCClient(self.config['deluge']['host'], self.config['deluge']['port'], self.secrets['deluge']['user'], self.secrets['deluge']['passwd'])
+    def __init__(self,torrent_id, config_path,secret_path):
+        self.config        	= self.read_config(config_path)
+        self.secrets       	= self.read_config(secret_path)
+        self.client 		=  DelugeRPCClient(self.config['deluge']['host'], self.config['deluge']['port'], self.secrets['deluge']['user'], self.secrets['deluge']['passwd'])
         self.client.connect()
+        self.torrent       	= self.client.call('core.get_torrent_status', torrent_id, ['name','label','move_completed_path'])
         for action_file in self.config['config']['actions']['files']:
             file_data = self.read_config(action_file)
             for action in file_data:
@@ -52,38 +53,58 @@ class label_cmd:
         else:
             raise
     def do_translate(self,arg):
-        for key,values in config['translate'].items():
-            searchword = key
-            replacewith = ''
-            if isinstance(values,list):
-                searchword = key
-                for y in values:
-                    if y in torrent:
-                        replacewith += torrent[y]
-                    else:
-                        replacewith += y
-            elif values in torrent:
-                    replacewith = torrent[values]
-            else:
-                do_log(2,"Error unsupported keyValue for torrent: " +key)
-            arg = arg.replace(searchword,replacewith)
-        return arg
+		torrent = self.torrent
+		for key,values in self.config['translate'].items():
+			searchword = key
+			replacewith = ''
+			if isinstance(values,list):
+				searchword = key
+				for y in values:
+					if y in torrent:
+						replacewith += torrent[y]
+					else:
+						replacewith += y
+			elif values in torrent:
+				replacewith = torrent[values]
+			else:
+				do_log(2,"Error unsupported keyValue for torrent: " +key)
+			arg = arg.replace(searchword,replacewith)
+		return arg
+    def get_label(self,torrent):
+		label_name = torrent['label']
+		if label_name in self.labels:
+			return label_name
+		else:
+			do_log(1,"Unkown label '" + label_name +"'")
+			return None
     def do_action(self):
-        action = config['actions'][config['labels'][torrent['label']]['action']]
-        executable = action['executable']
-        arguments = do_translate(action['arguments'],torrent)
-        
-        cmd = executable + arguments
-        result = subprocess.call(cmd)
-        
-        return result
+		config = self.config
+		label = self.get_label(self.torrent)
+		if label is None:
+			do_log(3,"Resorting to default action")
+			label = 'Default'
+		actions = self.labels[label]
+		for task in actions:
+			#Get executable file
+			executable = [self.actions[task]['executable']]
+			#Get all arguments
+			arguments = self.do_translate(self.actions[task]['argument'])
+			print arguments
+			#Seperate arguments
+			arguments = shlex.split(arguments)
+			
+			cmd = executable + arguments
+			print cmd
+			result = subprocess.call(cmd,shell=False)	
+		
+		return result
 
 
-Torrent_Id      ="0ccba3bc32bb5452bd700a39214e416414e6404f" #sys.argv[1]
+Torrent_Id      ="7139fc9d5893033bf5de7124cd0fba6128fc427f" #sys.argv[1]
 config_path     = "config/config.json"
 secret_path     = "config/secrets.json"
 c = label_cmd(Torrent_Id,config_path, secret_path)
-
+print c.do_action()
 ###Running the software
 ##if  len(sys.argv) > 2:
 ##    do_log(2,"Unsupported amount of arguments("+str(len(sys.argv))+"). Correct usage: script.py torrent_id")
