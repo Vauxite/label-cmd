@@ -30,12 +30,12 @@ class label_cmd:
             for label in file_data:
                 action = file_data[label]['action']
                 self.add_label(label,action)
-    def do_log(level,msg):
+    def do_log(self,level,msg):
         logger = logging.getLogger('label-cmd')
-        logger.setLevel(config['logging']['loglevel'])
+        logger.setLevel(self.config['logging']['loglevel'])
                         
-        handler = logging.FileHandler(config['logging']['logfile'])
-        handler.setLevel(config['logging']['loglevel'])
+        handler = logging.FileHandler(self.config['logging']['logfile'])
+        handler.setLevel(self.config['logging']['loglevel'])
         logformat = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s: %(message)s')
         handler.setFormatter(logformat)
 
@@ -94,9 +94,11 @@ class label_cmd:
 			arguments = shlex.split(arguments)
 			
 			cmd = executable + arguments
-			print cmd
-			result = subprocess.call(cmd,shell=False)	
-		
+			result = subprocess.call(cmd,shell=False)
+			if result == 0:
+				self.do_log(0,"Succesfully executed task {0} for torrent {1}".format(task,self.torrent['name']))
+			else:
+				self.do_log(2,"Task {0} for torrent {1} exited with code {2}".format(task,self.torrent['name'],result))
 		return result
 
 
