@@ -95,9 +95,9 @@ class label_cmd:
 			cmd = executable + arguments
 			result = subprocess.call(cmd,shell=False)
 			if result == 0:
-				self.do_log(0,"Succesfully executed task {0} for torrent {1}".format(task,self.torrent['name']))
+				self.do_log(0,"Succesfully executed task '{0}' for torrent '{1}'".format(task,self.torrent['name']))
 			else:
-				self.do_log(2,"Task {0} for torrent {1} exited with code {2}".format(task,self.torrent['name'],result))
+				self.do_log(2,"Task '{0}' for torrent '{1}' exited with code '{2}'".format(task,self.torrent['name'],result))
 		return result
 
 
