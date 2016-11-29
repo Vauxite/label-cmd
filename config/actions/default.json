@@ -1,7 +1,7 @@
 {
 	"extract":{
 		"executable":"/usr/bin/unrar",
-		"arguments":"-o- x \"%%torrentpath%%/*.rar\""
+		"arguments":"-r -o- x \"%%torrentpath%%/*.rar\" \"/mnt/media/flexget/Extracted\""
 	},
 	"ping":{
 		"executable":"ping",
@@ -9,7 +9,7 @@
 	},
 	"move":{
 		"executable":"cp",
-		"arguments":"-r %%torrentpath%% /new/path/folder"
+		"arguments":"-r %%torrentpath%% /mnt/media/flexget/Extracted"
 	},	
 	"none":{
 		"executable":"",
