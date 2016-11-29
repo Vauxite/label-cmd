@@ -1,0 +1,18 @@
+{
+	"tv":{
+		"action":
+			[
+				"extract",
+				"move"
+			]
+	},
+	"movies":{
+		"action":"extract"
+	},
+	"games":{
+		"action":"copy"
+	},
+	"Default":{
+		"action":"none"
+	}
+}
