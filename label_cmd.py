@@ -101,9 +101,12 @@ class label_cmd:
 		return result
 
 
-Torrent_Id      ="7139fc9d5893033bf5de7124cd0fba6128fc427f" #sys.argv[1]
+Torrent_Id      = sys.argv[1]
 config_path     = "config/config.json"
 secret_path     = "config/secrets.json"
+
+
+
 c = label_cmd(Torrent_Id,config_path, secret_path)
 c.do_action()
 
