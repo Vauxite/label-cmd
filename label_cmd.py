@@ -89,7 +89,6 @@ class label_cmd:
 			executable = [self.actions[task]['executable']]
 			#Get all arguments
 			arguments = self.do_translate(self.actions[task]['argument'])
-			print arguments
 			#Seperate arguments
 			arguments = shlex.split(arguments)
 			
@@ -106,34 +105,8 @@ Torrent_Id      ="7139fc9d5893033bf5de7124cd0fba6128fc427f" #sys.argv[1]
 config_path     = "config/config.json"
 secret_path     = "config/secrets.json"
 c = label_cmd(Torrent_Id,config_path, secret_path)
-print c.do_action()
-###Running the software
-##if  len(sys.argv) > 2:
-##    do_log(2,"Unsupported amount of arguments("+str(len(sys.argv))+"). Correct usage: script.py torrent_id")
-##    sys.exit()
-##else:
-##    client =  DelugeRPCClient(config['deluge']['host'], config['deluge']['port'], secrets['deluge']['user'], secrets['deluge']['passwd'])
-##    client.connect()
-##    T_filter = ['name','label']
-##    for value in config['translate'].values():
-##        if isinstance(value,list):
-##            for item in value:
-##                T_filter.append(item) 
-##        else:
-##            T_filter.append(value)
-##    torrent = client.call('core.get_torrent_status', Torrent_Id, T_filter)
-##    if torrent['label'] in config['labels']:
-##        try:
-##            do_log(0,do_action(config,torrent))
-##        except WindowsError:
-##            do_log(2,"Windows is not supported")
-##        except subprocess.CalledProcessError:
-##            do_log(1,"Attempted action is not supported")
-##        except:
-##            do_log(2,"Unexpected error")
-##            raise
-##    else:
-##        do_log(1,"Unkown label ("+torrent['label']+"). No Action taken")
+c.do_action()
+
 
 
 
