@@ -1,24 +1,34 @@
 {
-	"tv":{
+	"flexget-movies":{
 		"action":
 			[
 				"extract",
-				"move"
+				"regex_move"
 			]
 	},
 	"flexget-tv":{
 		"action":
 			[
-				"extract"
+				"extract",
+				"regex_move"
 			]
 	},
 	"movies":{
-		"action":"extract"
+		"action":
+			[
+				"extract"
+			]
 	},
 	"games":{
-		"action":"copy"
+		"action":
+			[
+				"copy"
+			]
 	},
 	"Default":{
-		"action":"none"
+		"action":
+			[
+				"none"
+			]
 	}
 }

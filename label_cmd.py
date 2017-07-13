@@ -1,6 +1,5 @@
 from deluge_client import DelugeRPCClient
 import sys,json,subprocess,logging,shlex,re
-
 class label_cmd:
     actions ={}
     labels ={}
@@ -10,7 +9,6 @@ class label_cmd:
         return data
     def add_action(self,action,run):
 		self.actions[action] = run
-        #self.actions.append((action,run))
     def add_label(self,label,action):
         self.labels[label] = action
     def __init__(self,torrent_id, config_path,secret_path):
@@ -30,6 +28,7 @@ class label_cmd:
             for label in file_data:
                 action = file_data[label]['action']
                 self.add_label(label,action)
+				
     def do_log(self,level,msg):
         logger = logging.getLogger('label-cmd')
         logger.setLevel(self.config['logging']['loglevel'])
@@ -67,38 +66,51 @@ class label_cmd:
 			elif values in torrent:
 				replacewith = torrent[values]
 			else:
-				do_log(2,"Error unsupported keyValue for torrent: " +key)
+				self.do_log(2,"Error unsupported keyValue for torrent: " +key)
+				
 			arg = arg.replace(searchword,replacewith)
 		return arg
     def get_label(self,torrent):
-		label_name = torrent['label']
+		try:
+			label_name = torrent['label']
+		except KeyError:
+			label_name = "Default"
 		if label_name in self.labels:
 			return label_name
 		else:
-			do_log(1,"Unkown label '" + label_name +"'")
+			self.do_log(1,"Unkown label '" + label_name +"'")
 			return None
     def do_action(self):
 		config = self.config
 		label = self.get_label(self.torrent)
 		if label is None:
-			do_log(3,"Resorting to default action")
+			self.do_log(3,"Resorting to default action")
 			label = 'Default'
 		actions = self.labels[label]
+		#
+		if 'none' in actions:
+			self.do_log(1,"Torrent '{0}' does not have any action".format(self.torrent['name']))
+			return False
 		for task in actions:
 			#Get executable file
-			executable = [self.actions[task]['executable']]
+			executable = self.actions[task]['executable']
 			#Get all arguments
 			arguments = self.do_translate(self.actions[task]['argument'])
-			#Seperate arguments
-			arguments = shlex.split(arguments)
 			
-			cmd = executable + arguments
-			result = subprocess.call(cmd,shell=False)
+			cmd = executable +" "+ arguments
+			
+			process_call = shlex.split(cmd)
+
+			
+			result = subprocess.call(process_call,shell=False)
+			#result = subprocess.call(cmd,shell=False)
+			
+			
 			if result == 0:
 				self.do_log(0,"Succesfully executed task '{0}' for torrent '{1}'".format(task,self.torrent['name']))
 			else:
 				self.do_log(2,"Task '{0}' for torrent '{1}' exited with code '{2}'".format(task,self.torrent['name'],result))
-		return result
+		return True
 
 
 Torrent_Id      = sys.argv[1]

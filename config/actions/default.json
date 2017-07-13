@@ -1,7 +1,7 @@
 {
 	"extract":{
 		"executable":"/usr/bin/unrar",
-		"arguments":"-r -o- x \"%%torrentpath%%/*.rar\" \"/mnt/media/flexget/Extracted\""
+		"arguments":"-r -o- x \"%%torrentpath%%/*.rar\" \"/mnt/media2/flexget/Extracted\""
 	},
 	"ping":{
 		"executable":"ping",
@@ -9,8 +9,12 @@
 	},
 	"move":{
 		"executable":"cp",
-		"arguments":"-r %%torrentpath%% /mnt/media/flexget/Extracted"
-	},	
+		"arguments":"-r %%torrentpath%% /mnt/media2/flexget/Extracted"
+	},
+	"regex_move":{
+		"executable":"find",
+		"arguments":" '%%torrentpath%%' -regextype posix-extended ! -iname '*sample*' -iregex '^.*\\.(mkv|avi|mp4)$' -exec cp {} /mnt/media2/flexget/Extracted \\;"
+	},
 	"none":{
 		"executable":"",
 		"arguments":""
