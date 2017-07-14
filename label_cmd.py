@@ -103,9 +103,7 @@ class label_cmd:
 
 			
 			result = subprocess.call(process_call,shell=False)
-			#result = subprocess.call(cmd,shell=False)
-			
-			
+
 			if result == 0:
 				self.do_log(0,"Succesfully executed task '{0}' for torrent '{1}'".format(task,self.torrent['name']))
 			else:
