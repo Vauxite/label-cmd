@@ -1,22 +1,18 @@
 {
-	"extract_tv":{
-		"executable":"/usr/bin/unrar",
-		"arguments":"-r -o- x \"%%torrentpath%%/*.rar\" \"/mnt/media2/flexget/Extracted\""
-	},
 	"ping":{
 		"executable":"ping",
 		"arguments":"-t 127.0.0.1"
 	},
-	"move":{
-		"executable":"cp",
-		"arguments":"-r %%torrentpath%% /mnt/media2/flexget/Extracted"
+	"extract_tv":{
+		"executable":"/usr/bin/unrar",
+		"arguments":"-r -o- x \"%%torrentpath%%/*.rar\" \"/mnt/media2/flexget/Extracted\""
 	},
 	"regex_move_tv":{
 		"executable":"find",
 		"arguments":" '%%torrentpath%%' -regextype posix-extended ! -iname '*sample*' -iregex '^.*\\.(mkv|avi|mp4)$' -exec cp {} /mnt/media2/flexget/Extracted \\;"
 	},
-	"create_folder":{
-		"executable":"/mkdir",
+	"create_folder_movie":{
+		"executable":"/bin/mkdir",
 		"arguments":"-p \"/mnt/media2/movies/%%torrentname%%\""
 	},
 	"extract_movie":{
@@ -25,8 +21,8 @@
 	},
 	"regex_move_movie":{
 		"executable":"find",
-		"arguments":" '%%torrentpath%%' -regextype posix-extended ! -iname '*sample*' -iregex '^.*\\.(mkv|avi|mp4)$' -exec cp {} /mnt/media2/movies/%%torrentname%% \\;"
-	}
+		"arguments":" '%%torrentpath%%' -regextype posix-extended ! -iname '*sample*' -iregex '^.*\\.(mkv|avi|mp4)$' -exec cp {} '/mnt/media2/movies/%%torrentname%%' \\;"
+	},
 	"none":{
 		"executable":"",
 		"arguments":""

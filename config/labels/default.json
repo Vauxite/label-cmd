@@ -2,9 +2,9 @@
 	"flexget-movies":{
 		"action":
 			[
-				"create_folder",
-				"extract",
-				"regex_move"
+				"create_folder_movie",
+				"extract_movie",
+				"regex_move_movie"
 			]
 	},
 	"flexget-tv":{
