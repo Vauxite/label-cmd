@@ -1,5 +1,6 @@
+#!/usr/bin/python
 from deluge_client import DelugeRPCClient
-import sys,json,subprocess,logging,shlex,re
+import os,sys,json,subprocess,logging,shlex,re
 class label_cmd:
     actions ={}
     labels ={}
@@ -110,6 +111,9 @@ class label_cmd:
 				self.do_log(2,"Task '{0}' for torrent '{1}' exited with code '{2}'".format(task,self.torrent['name'],result))
 		return True
 
+
+#Set working directory to current directory
+os.chdir(os.path.dirname(sys.argv[0]))
 
 Torrent_Id      = sys.argv[1]
 config_path     = "config/config.json"
